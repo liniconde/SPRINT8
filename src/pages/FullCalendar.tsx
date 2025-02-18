@@ -4,9 +4,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import EventCard from "../components/EventCard";
-import { getConcerts } from "../services/concertService";
-
-interface Concert {
+import { getConcerts, updateConcert } from "../services/concertService"; // Importamos la función para actualizar la API
+import EditEventModal from "../components/EditEvent";
+export interface Concert {
   _id: string;
   name: string;
   description: string;
@@ -20,8 +20,11 @@ const FullCalendarPage: React.FC = () => {
   const [events, setEvents] = useState<
     { id: string; title: string; start: string }[]
   >([]);
+  const [selectedEvent, setSelectedEvent] = useState<Concert | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editedEvent, setEditedEvent] = useState({ name: "", date: "" });
 
-  useEffect(() => {
+  const updateConcertsAndEvents = () => {
     getConcerts().then((data) => {
       const validConcerts = data.filter(
         (concert: Concert) =>
@@ -30,31 +33,52 @@ const FullCalendarPage: React.FC = () => {
           concert.location.longitude
       );
       setConcerts(validConcerts);
+
+      // Convertimos los conciertos en eventos para el calendario
+      setEvents(
+        validConcerts.map((concert: { _id: any; name: any; date: any }) => ({
+          id: concert._id,
+          title: concert.name,
+          start: concert.date,
+        }))
+      );
     });
+  };
+
+  useEffect(() => {
+    updateConcertsAndEvents();
   }, []);
 
-  // Función para añadir un evento al calendario
-  const handleAddEvent = (concert: Concert) => {
-    const newEvent = {
-      id: concert._id,
-      title: concert.name,
-      start: concert.date, // Fecha del evento desde el backend
-    };
-
-    // Verificar si ya está en el calendario
-    if (!events.some((event) => event.id === concert._id)) {
-      setEvents([...events, newEvent]);
-    } else {
-      alert("Este evento ya está en el calendario.");
+  // Función para abrir el modal y cargar los datos del evento seleccionado
+  const handleEventClick = (clickInfo: any) => {
+    const event = concerts.find((c) => c._id === clickInfo.event.id);
+    if (event) {
+      setSelectedEvent(event);
+      setEditedEvent({ name: event.name, date: event.date });
+      setModalIsOpen(true);
     }
   };
 
-  // Función para eliminar un evento del calendario
-  const handleEventClick = (clickInfo: any) => {
-    if (
-      window.confirm(`¿Quieres eliminar el evento "${clickInfo.event.title}"?`)
-    ) {
-      setEvents(events.filter((event) => event.id !== clickInfo.event.id));
+  // Función para actualizar el evento en el backend y en el estado
+  const handleUpdateEvent = async () => {
+    if (!selectedEvent) return;
+
+    const updatedEvent = {
+      ...selectedEvent,
+      name: editedEvent.name,
+      date: editedEvent.date,
+    };
+
+    try {
+      await updateConcert(selectedEvent._id, updatedEvent); // Enviamos los datos actualizados al backend
+
+      // Actualizamos la lista de eventos en el estado
+      updateConcertsAndEvents();
+
+      // Cerramos el modal
+      setModalIsOpen(false);
+    } catch (error) {
+      console.error("❌ Error al actualizar el evento:", error);
     }
   };
 
@@ -64,16 +88,15 @@ const FullCalendarPage: React.FC = () => {
         Calendario de Conciertos
       </h1>
       <p className="text-gray-700 mb-6">
-        Selecciona un evento para añadirlo al calendario. También puedes hacer
-        clic en un evento dentro del calendario para eliminarlo.
+        Haz clic en un evento para editarlo. Puedes cambiar su nombre o fecha.
       </p>
 
       {/* Contenedor en dos columnas */}
       <div className="flex flex-col lg:flex-row w-full max-w-7xl h-[80vh] gap-6">
-        {/* Sección de Tarjetas de Conciertos */}
+        {/* Tarjetas de eventos */}
         <div className="w-full lg:w-1/3 h-full overflow-y-auto rounded-lg p-4">
           <h2 className="text-2xl font-title text-primary mb-4">
-            Selecciona un Evento
+            🎼 Selecciona un Evento
           </h2>
           <div className="flex flex-col gap-4">
             {concerts.map((concert) => (
@@ -84,38 +107,39 @@ const FullCalendarPage: React.FC = () => {
                 date={concert.date}
                 imageUrl={concert.imageUrl || "/images/default.jpg"}
                 location={concert.location.venue}
-                onClick={() => handleAddEvent(concert)} // 🔹 Agregar evento al calendario
+                onClick={() => setSelectedEvent(concert)}
               />
             ))}
           </div>
         </div>
 
-        {/* Sección del Calendario */}
+        {/* Calendario */}
         <div className="w-full lg:w-2/3 bg-white p-4 rounded-lg shadow-lg">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             editable={true}
             selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            events={events} // 🔹 Eventos cargados dinámicamente
-            eventClick={handleEventClick} // 🔹 Función para eliminar eventos
+            events={events}
+            eventClick={handleEventClick} // Abrir modal al hacer clic en un evento
             height="auto"
             headerToolbar={{
               left: "prev,next today",
               center: "title",
               right: "dayGridMonth,dayGridWeek,dayGridDay",
             }}
-            dayHeaderFormat={{ weekday: "short" }}
-            dayCellContent={(info) => (
-              <div className="text-gray-700 font-semibold text-sm">
-                {info.dayNumberText}
-              </div>
-            )}
           />
         </div>
       </div>
+  
+        {/* Modal para editar eventos */}
+      <EditEventModal
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        editedEvent={editedEvent}
+        setEditedEvent={setEditedEvent}
+        handleUpdateEvent={handleUpdateEvent}
+      />
     </div>
   );
 };
