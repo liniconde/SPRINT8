@@ -1,40 +1,34 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   return (
-    <nav className=" bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg p-4">
-      <ul className="flex gap-6 text-white text-lg">
-        <li>
-          <Link to="/" className="hover:text-gray-400 transition duration-300">
-            Hombre
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/mapa"
-            className="hover:text-gray-400 transition duration-300"
-          >
-            Mapa
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/fullcalendar"
-            className="hover:text-gray-400 transition duration-300"
-          >
-            FullCalendar
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/graficos"
-            className="hover:text-gray-400 transition duration-300"
-          >
-            Gráficos
-          </Link>
-        </li>
-      </ul>
+    <nav className=" w-full bg-violet-500 text-white py-4">
+      <div className="container mx-auto flex justify-center space-x-8">
+        <Link
+          to="/"
+          className="text-lg font-title hover:text-secondary transition"
+        >
+          Home
+        </Link>
+        <Link
+          to="/mapa"
+          className="text-lg font-title hover:text-secondary transition"
+        >
+          Mapa
+        </Link>
+        <Link
+          to="/fullcalendar"
+          className="text-lg font-title hover:text-secondary transition"
+        >
+          Full Calendar
+        </Link>
+        <Link
+          to="/graficos"
+          className="text-lg font-title hover:text-secondary transition"
+        >
+          Gráficos
+        </Link>
+      </div>
     </nav>
   );
 };

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Hombre from "../pages/Hombre";
-import Mapa from "../pages/Mapa";
+import Hombre from "../pages/Home";
+import Mapa from "../pages/MapPage";
 import FullCalendar from "../pages/FullCalendar";
 import Graficos from "../pages/Graficos";
 
