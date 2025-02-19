@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Hombre from "../pages/Home";
 import Mapa from "../pages/MapPage";
 import FullCalendar from "../pages/FullCalendar";
-import Graficos from "../pages/Graficos";
+import ChartsPage from "../pages/ChartsPage";
 
 const App: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Hombre />} />
           <Route path="/mapa" element={<Mapa />} />
           <Route path="/fullcalendar" element={<FullCalendar />} />
-          <Route path="/graficos" element={<Graficos />} />
+          <Route path="/charts" element={<ChartsPage />} />
         </Routes>
       </div>
     </Router>

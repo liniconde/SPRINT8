@@ -25,8 +25,8 @@ const MapTable: React.FC = () => {
         setConcerts(response.data);
         setLoading(false);
       })
-      .catch((err) => {
-        setError("Error fetching concerts");
+      .catch((err: any) => {
+        setError(`Error fetching concerts: ${err?.message}`);
         setLoading(false);
       });
   }, []);

@@ -17,6 +17,7 @@ const MapPage: React.FC = () => {
   const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
 
   useEffect(() => {
+    console.log("📡 Solicitando datos del backend...");
     getConcerts().then((data) => {
       const validConcerts = data.filter(
         (concert: Concert) =>

@@ -23,7 +23,7 @@ const Navbar = () => {
           Full Calendar
         </Link>
         <Link
-          to="/graficos"
+          to="/charts"
           className="text-lg font-title hover:text-secondary transition"
         >
           Gráficos

@@ -1,6 +1,7 @@
+import Charts from "../components/Charts";
 import MapsTable from "../components/MapsTable";
 
-const Graficos: React.FC = () => {
+const ChartsPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center min-h-screen p-6">
       <h1 className="text-5xl font-title text-primary text-center mb-4">
@@ -11,10 +12,13 @@ const Graficos: React.FC = () => {
         interactivos.
       </p>
 
+        {/* Gráficos */}
+        <Charts />
+
       {/* Agregamos la tabla de conciertos */}
       <MapsTable />
     </div>
   );
 };
 
-export default Graficos;
+export default ChartsPage;
