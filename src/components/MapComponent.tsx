@@ -26,6 +26,8 @@ const MapComponent: React.FC<Props> = ({ concerts, selectedConcert }) => {
 
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
+  console.log("MapToken -> concerts", mapboxToken);
+
   // Inicializar el mapa solo una vez
   useEffect(() => {
     if (!mapboxToken) {
