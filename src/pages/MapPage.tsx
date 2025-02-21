@@ -42,7 +42,8 @@ const MapPage: React.FC = () => {
         seasonFilter === ""
           ? validConcerts
           : validConcerts.filter(
-              (concert) => getSeason(concert.date) === seasonFilter
+              (concert: { date: string }) =>
+                getSeason(concert.date) === seasonFilter
             );
 
       setConcerts(filteredConcerts);
