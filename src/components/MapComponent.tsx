@@ -28,6 +28,8 @@ const MapComponent: React.FC<Props> = ({ concerts, selectedConcert }) => {
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
 
+  console.log("MapToken ->", mapboxgl.accessToken, mapboxToken);
+
   if (env !== "development") {
     mapboxgl.accessToken = mapboxToken.split("=")[1];
   }
