@@ -4,6 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "./MapComponent.css";
 
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
+const env = import.meta.env.VITE_ENV;
 mapboxgl.accessToken = mapboxToken || "";
 const INITIAL_CENTER: LngLatLike = [2.1734, 41.3851];
 const INITIAL_ZOOM = 10;
@@ -26,7 +27,12 @@ const MapComponent: React.FC<Props> = ({ concerts, selectedConcert }) => {
 
   const [center, setCenter] = useState(INITIAL_CENTER);
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
-  console.log("MapToken -> concerts", mapboxToken);
+
+  if (env !== "development") {
+    mapboxgl.accessToken = mapboxToken.split("=")[1];
+  }
+
+  console.log("MapToken -> concerts", mapboxgl.accessToken);
 
   // Inicializar el mapa solo una vez
   useEffect(() => {
