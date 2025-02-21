@@ -30,10 +30,6 @@ const MapComponent: React.FC<Props> = ({ concerts, selectedConcert }) => {
 
   console.log("MapToken ->", mapboxgl.accessToken, mapboxToken);
 
-  if (env !== "development") {
-    mapboxgl.accessToken = mapboxToken.split("=")[1];
-  }
-
   console.log("MapToken -> concerts", mapboxgl.accessToken);
 
   // Inicializar el mapa solo una vez
