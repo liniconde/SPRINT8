@@ -1,5 +1,4 @@
 import Charts from "../components/Charts";
-import MapsTable from "../components/MapsTable";
 
 const ChartsPage: React.FC = () => {
   return (
@@ -12,11 +11,8 @@ const ChartsPage: React.FC = () => {
         interactivos.
       </p>
 
-        {/* Gráficos */}
-        <Charts />
-
-      {/* Agregamos la tabla de conciertos */}
-      <MapsTable />
+      {/* Gráficos */}
+      <Charts />
     </div>
   );
 };
